@@ -1,132 +1,146 @@
 # -*- coding: utf-8 -*-
-"""フリマ社内システムの画面遷移図を draw.io (.drawio / mxGraph XML) で生成する。"""
+"""フリマ社内システム 画面遷移図（draw.io 2ページ：社員側ハブ / 管理者側ハブ）。"""
 
-NODES = []  # (id, label, x, y, w, h, fill, stroke)
-EDGES = []  # (source, target, label, style_extra)
+# 色: (fill, stroke, strokeWidth, bold)
+GATE  = ("#f8cecc", "#b85450", 1, 0)   # ログイン（赤）
+HUB   = ("#ffe082", "#ff8f00", 3, 1)   # ハブ（item-101 / 701）（黄・太枠・太字）
+BLUE  = ("#dae8fc", "#6c8ebf", 1, 0)   # 出品系（青）
+GREEN = ("#d5e8d4", "#82b366", 1, 0)   # 取引・物品・メッセージ（緑）
+ADMIN = ("#ffe6cc", "#d79b00", 1, 0)   # 管理者（橙）
+SUB   = ("#eeeeee", "#999999", 1, 0)   # サブ/補助
 
-def node(nid, label, x, y, w=170, h=56, fill="#dae8fc", stroke="#6c8ebf"):
-    NODES.append((nid, label, x, y, w, h, fill, stroke))
-
-def edge(s, t, label="", extra=""):
-    EDGES.append((s, t, label, extra))
-
-# 色
-EMP   = ("#dae8fc", "#6c8ebf")  # 社員側（青）
-EMPD  = ("#d5e8d4", "#82b366")  # 物品/取引（緑）
-ADMIN = ("#ffe6cc", "#d79b00")  # 管理者側（橙）
-GATE  = ("#f8cecc", "#b85450")  # ログイン（赤）
-
-# ===== タイトル / 区分ラベル =====
-node("title", "フリマ社内システム　画面遷移図", 40, 16, 760, 30, "none", "none")
-node("lbl_emp",   "■ 社員側", 40, 60, 120, 24, "none", "none")
-node("lbl_admin", "■ 管理者側", 40, 560, 130, 24, "none", "none")
-
-# ===== 社員側 =====
-node("login",  "ログイン画面\n(BASE-101 / log-001)", 40,  100, 170, 56, *GATE)
-node("menu",   "メニュー・物品一覧\n(item-101)",       260, 100, 170, 56, *EMP)
-node("search", "検索結果\n(item-102)",                 500, 90,  170, 56, *EMP)
-node("detail", "物品詳細閲覧\n(item-107)",             740, 60,  170, 56, *EMPD)
-node("auction","物品詳細(オークション)\n(item-111)",    980, 60,  180, 56, *EMPD)
-
-node("post",   "出品画面\n(item-103)",                 500, 180, 170, 56, *EMP)
-node("confirm","出品情報確認\n(item-109)",             740, 180, 170, 56, *EMP)
-
-node("msglist","メッセージ一覧\n(item-104)",           500, 270, 170, 56, *EMP)
-node("msgbody","メッセージ内容\n(item-105 / BASE-105)",740, 270, 180, 56, *EMP)
-
-node("mypage", "マイページ\n(item-106)",               500, 360, 170, 56, *EMP)
-node("qr",     "譲渡完了登録 /\nQRコード状況確認",       740, 360, 180, 56, *EMPD)
-
-# 社員側エッジ
-edge("login","menu","ログイン")
-edge("menu","login","ログアウト")
-edge("menu","search","検索")
-edge("search","detail","選択／クリック")
-edge("menu","detail","商品クリック")
-edge("detail","auction","オークション物品")
-edge("menu","post","出品")
-edge("post","confirm","確認")
-edge("confirm","post","編集")
-edge("confirm","menu","出品確定")
-edge("menu","msglist","メッセージ")
-edge("msglist","msgbody","クリック")
-edge("menu","mypage","マイページ")
-edge("qr","msgbody","状況連携")
-edge("detail","msgbody","メッセージ送信")
-
-# ===== 管理者側 =====
-node("alogin", "管理者ログイン\n(log-002)",            40,  600, 170, 56, *GATE)
-node("a701",   "管理者メニュー /\n社員情報管理 (701)",  260, 600, 180, 56, *ADMIN)
-
-node("a702",   "パスワードリセット\n(702)",            520, 500, 160, 50, *ADMIN)
-node("a709",   "利用制限\n(709)",                      520, 560, 160, 50, *ADMIN)
-node("a703",   "カテゴリ管理\n(703)",                  520, 620, 160, 50, *ADMIN)
-node("a704",   "検索キー管理\n(704)",                  520, 680, 160, 50, *ADMIN)
-
-node("a706",   "NGキーワード登録\n(706)",              720, 500, 160, 50, *ADMIN)
-node("a710",   "統計情報一覧\n(710)",                  720, 560, 160, 50, *ADMIN)
-node("a705",   "不適切コンテンツ監視\n(705)",          720, 640, 180, 56, *ADMIN)
-
-node("a707",   "物品削除\n(707)",                      960, 610, 150, 50, *ADMIN)
-node("a708",   "メッセージ削除\n(708)",                960, 680, 150, 50, *ADMIN)
-
-# 管理者側エッジ
-edge("alogin","a701","ログイン")
-edge("a701","a702","編集")
-edge("a701","a709","利用制限")
-edge("a701","a703","カテゴリ管理")
-edge("a701","a704","検索キー管理")
-edge("a701","a706","NGキーワード")
-edge("a701","a710","統計情報")
-edge("a701","a705","監視")
-edge("a705","a707","物品削除")
-edge("a705","a708","メッセージ削除")
-
-# ===== XML 生成 =====
 def esc(s):
     return (s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
              .replace('"',"&quot;").replace("\n","&#10;"))
 
-cells = []
-for nid,label,x,y,w,h,fill,stroke in NODES:
-    if fill == "none":
-        style = f"text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize={16 if nid=='title' else 13};"
-    else:
-        style = (f"rounded=1;whiteSpace=wrap;html=1;fillColor={fill};strokeColor={stroke};"
-                 f"fontSize=11;arcSize=12;")
-    cells.append(
-        f'        <mxCell id="{nid}" value="{esc(label)}" style="{style}" vertex="1" parent="1">\n'
-        f'          <mxGeometry x="{x}" y="{y}" width="{w}" height="{h}" as="geometry" />\n'
-        f'        </mxCell>')
+def build_diagram(name, did, nodes, edges):
+    cells = ['        <mxCell id="0" />',
+             '        <mxCell id="1" parent="0" />']
+    for nid,label,x,y,w,h,role in nodes:
+        if role == "TITLE":
+            style = "text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=18;"
+        elif role == "LABEL":
+            style = "text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=13;"
+        else:
+            fill,stroke,sw,bold = role
+            style = (f"rounded=1;whiteSpace=wrap;html=1;fillColor={fill};strokeColor={stroke};"
+                     f"strokeWidth={sw};fontSize=11;arcSize=10;fontStyle={'1' if bold else '0'};")
+        cells.append(
+            f'        <mxCell id="{nid}" value="{esc(label)}" style="{style}" vertex="1" parent="1">\n'
+            f'          <mxGeometry x="{x}" y="{y}" width="{w}" height="{h}" as="geometry" />\n'
+            f'        </mxCell>')
+    for i,(s,t,label,extra) in enumerate(edges):
+        style = ("edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;"
+                 "jettySize=auto;orthogonalLoop=1;fontSize=10;labelBackgroundColor=#ffffff;" + extra)
+        cells.append(
+            f'        <mxCell id="{did}_e{i}" value="{esc(label)}" style="{style}" edge="1" parent="1" source="{s}" target="{t}">\n'
+            f'          <mxGeometry relative="1" as="geometry" />\n'
+            f'        </mxCell>')
+    return (f'  <diagram name="{name}" id="{did}">\n'
+            f'    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" '
+            f'connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">\n'
+            f'      <root>\n' + "\n".join(cells) + "\n"
+            f'      </root>\n    </mxGraphModel>\n  </diagram>')
 
-for i,(s,t,label,extra) in enumerate(EDGES):
-    style = ("edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;"
-             "jettySize=auto;orthogonalLoop=1;fontSize=10;" + extra)
-    cells.append(
-        f'        <mxCell id="e{i}" value="{esc(label)}" style="{style}" edge="1" parent="1" source="{s}" target="{t}">\n'
-        f'          <mxGeometry relative="1" as="geometry" />\n'
-        f'        </mxCell>')
+# =========================================================
+# ページ1：社員側（ハブ = item-101 トップ／物品一覧）
+# =========================================================
+n1 = [
+ ("p1title","社員側 画面遷移図　— トップ画面(item-101)を起点に各画面へ —",40,16,900,30,"TITLE"),
 
-xml = (
-'<mxfile host="app.diagrams.net" type="device">\n'
-'  <diagram name="画面遷移図" id="furima-flow">\n'
-'    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" '
-'connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" '
-'math="0" shadow="0">\n'
-'      <root>\n'
-'        <mxCell id="0" />\n'
-'        <mxCell id="1" parent="0" />\n'
-+ "\n".join(cells) + "\n"
-'      </root>\n'
-'    </mxGraphModel>\n'
-'  </diagram>\n'
-'</mxfile>\n'
-)
+ ("login","1. ログイン画面\n(log-001 / BASE-101)",40,380,180,64,GATE),
+ ("top","2. トップ／物品一覧画面\n(item-101)\n★メニュー起点",300,360,220,100,HUB),
+
+ # 出品フロー（上）
+ ("post","3. 出品・物品情報入力画面\n(item-103)",620,120,210,60,BLUE),
+ ("ph","① 写真登録画面",900,40,170,44,BLUE),
+ ("cat","② カテゴリ設定画面",900,92,170,44,BLUE),
+ ("price","③ 価格条件設定画面",900,144,170,44,BLUE),
+ ("limit","④ 登録期限設定画面",900,196,170,44,BLUE),
+ ("confirm","4. 出品確認画面\n(item-109)",620,250,210,60,BLUE),
+ ("done","5. 出品完了画面\n(item-108)",620,340,210,60,BLUE),
+
+ # マイページ（左下）
+ ("mypage","6. 出品後マイページ画面\n(item-106)",300,520,220,64,GREEN),
+
+ # 取引フロー（下）
+ ("detail","7. 物品詳細画面(応募・交渉)\n(item-107)",620,470,220,64,GREEN),
+ ("auction","物品詳細(オークション)\n(item-111)",900,440,190,56,GREEN),
+ ("msg","8. メッセージ画面\n(item-104 / item-105)",900,520,190,56,GREEN),
+ ("deal","9. 成約後(譲渡完了まで)画面\n(item-110)",900,610,210,56,GREEN),
+ ("comp","10. 譲渡完了画面",900,700,190,50,GREEN),
+]
+e1 = [
+ ("login","top","ログイン",""),
+ ("top","login","ログアウト","dashed=1;"),
+ ("login","login","認証エラー(再入力)","dashed=1;strokeColor=#b85450;fontColor=#b85450;"),
+
+ ("top","post","出品する",""),
+ ("post","ph","①",""),
+ ("post","cat","②",""),
+ ("post","price","③",""),
+ ("post","limit","④",""),
+ ("post","confirm","確認画面へ",""),
+ ("confirm","post","修正する","dashed=1;"),
+ ("confirm","done","出品する",""),
+ ("done","top","トップへ","dashed=1;"),
+
+ ("top","mypage","マイページ",""),
+ ("mypage","post","編集／再出品","dashed=1;"),
+
+ ("top","detail","詳細表示／検索",""),
+ ("detail","auction","オークション入札",""),
+ ("detail","msg","メッセージ／応募",""),
+ ("detail","deal","応募成立",""),
+ ("deal","comp","譲渡完了を登録",""),
+]
+
+# =========================================================
+# ページ2：管理者側（ハブ = 701 管理者メニュー）
+# =========================================================
+n2 = [
+ ("p2title","管理者側 画面遷移図　— 管理者メニュー(701)を起点に各画面へ —",40,16,900,30,"TITLE"),
+
+ ("alogin","管理者ログイン\n(log-002)",40,420,180,64,GATE),
+ ("a701","管理者メニュー／社員情報管理\n(701)\n★メニュー起点",300,400,230,110,HUB),
+ ("tmppw","仮パスワード発行",300,250,180,48,SUB),
+
+ ("a702","パスワードリセット\n(702)",680,60,200,52,ADMIN),
+ ("a703","カテゴリ管理\n(703)",680,140,200,52,ADMIN),
+ ("a704","検索キー管理\n(704)",680,220,200,52,ADMIN),
+ ("a705","不適切コンテンツ監視\n(705)",680,300,200,52,ADMIN),
+ ("a706","NGキーワード登録\n(706)",680,380,200,52,ADMIN),
+ ("a707","物品削除\n(707)",680,460,200,52,ADMIN),
+ ("a708","メッセージ削除\n(708)",680,540,200,52,ADMIN),
+ ("a709","利用制限\n(709)",680,620,200,52,ADMIN),
+ ("a710","統計情報一覧\n(710)",680,700,200,52,ADMIN),
+]
+e2 = [
+ ("alogin","a701","ログイン",""),
+ ("a701","tmppw","社員追加","dashed=1;"),
+ ("a701","a702","パスワードリセット",""),
+ ("a701","a703","カテゴリ管理",""),
+ ("a701","a704","検索キー管理",""),
+ ("a701","a705","不適切コンテンツ監視",""),
+ ("a701","a706","NGキーワード登録",""),
+ ("a701","a707","物品削除",""),
+ ("a701","a708","メッセージ削除",""),
+ ("a701","a709","利用制限",""),
+ ("a701","a710","統計情報",""),
+ # 監視からの削除導線（補助）
+ ("a705","a707","監視→削除","dashed=1;strokeColor=#999999;fontColor=#999999;"),
+ ("a705","a708","監視→削除","dashed=1;strokeColor=#999999;fontColor=#999999;"),
+]
+
+xml = ('<mxfile host="app.diagrams.net" type="device">\n'
+       + build_diagram("社員側（item-101起点）","emp", n1, e1) + "\n"
+       + build_diagram("管理者側（701起点）","admin", n2, e2) + "\n"
+       + '</mxfile>\n')
 
 import os
-os.makedirs('/home/user/system/docs/design', exist_ok=True)
 out = '/home/user/system/docs/design/画面遷移図_フリマ社内システム.drawio'
-with open(out, 'w', encoding='utf-8') as f:
+with open(out,'w',encoding='utf-8') as f:
     f.write(xml)
 print('saved:', out)
-print('nodes:', len(NODES), 'edges:', len(EDGES))
+print('page1 nodes/edges:', len(n1), len(e1))
+print('page2 nodes/edges:', len(n2), len(e2))
