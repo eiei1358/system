@@ -1,0 +1,160 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="画面遷移図" id="furima-flow">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="フリマ社内システム　画面遷移図" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="40" y="16" width="760" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_emp" value="■ 社員側" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="120" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_admin" value="■ 管理者側" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="560" width="130" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="login" value="ログイン画面&#10;(BASE-101 / log-001)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="170" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="menu" value="メニュー・物品一覧&#10;(item-101)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="260" y="100" width="170" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="search" value="検索結果&#10;(item-102)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="500" y="90" width="170" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="detail" value="物品詳細閲覧&#10;(item-107)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="740" y="60" width="170" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="auction" value="物品詳細(オークション)&#10;(item-111)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="980" y="60" width="180" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="post" value="出品画面&#10;(item-103)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="500" y="180" width="170" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="confirm" value="出品情報確認&#10;(item-109)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="740" y="180" width="170" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="msglist" value="メッセージ一覧&#10;(item-104)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="500" y="270" width="170" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="msgbody" value="メッセージ内容&#10;(item-105 / BASE-105)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="740" y="270" width="180" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="mypage" value="マイページ&#10;(item-106)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="500" y="360" width="170" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="qr" value="譲渡完了登録 /&#10;QRコード状況確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="740" y="360" width="180" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="alogin" value="管理者ログイン&#10;(log-002)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="170" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="a701" value="管理者メニュー /&#10;社員情報管理 (701)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="260" y="600" width="180" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="a702" value="パスワードリセット&#10;(702)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="500" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a709" value="利用制限&#10;(709)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="560" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a703" value="カテゴリ管理&#10;(703)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="620" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a704" value="検索キー管理&#10;(704)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="680" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a706" value="NGキーワード登録&#10;(706)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="500" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a710" value="統計情報一覧&#10;(710)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="560" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a705" value="不適切コンテンツ監視&#10;(705)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="720" y="640" width="180" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="a707" value="物品削除&#10;(707)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="960" y="610" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a708" value="メッセージ削除&#10;(708)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="960" y="680" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e0" value="ログイン" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="login" target="menu">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="ログアウト" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="menu" target="login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="検索" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="menu" target="search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="選択／クリック" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="search" target="detail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="商品クリック" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="menu" target="detail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="オークション物品" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="detail" target="auction">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="出品" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="menu" target="post">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="確認" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="post" target="confirm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="編集" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="confirm" target="post">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="出品確定" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="confirm" target="menu">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="メッセージ" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="menu" target="msglist">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="クリック" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="msglist" target="msgbody">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="マイページ" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="menu" target="mypage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="状況連携" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="qr" target="msgbody">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="メッセージ送信" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="detail" target="msgbody">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="ログイン" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="alogin" target="a701">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="編集" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="a701" target="a702">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="利用制限" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="a701" target="a709">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" value="カテゴリ管理" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="a701" target="a703">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" value="検索キー管理" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="a701" target="a704">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" value="NGキーワード" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="a701" target="a706">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" value="統計情報" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="a701" target="a710">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" value="監視" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="a701" target="a705">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" value="物品削除" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="a705" target="a707">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" value="メッセージ削除" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;jettySize=auto;orthogonalLoop=1;fontSize=10;" edge="1" parent="1" source="a705" target="a708">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
