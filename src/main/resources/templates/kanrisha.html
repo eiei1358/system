@@ -1,10 +1,145 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!--/*
+  管理者メニュー画面（701）：ログイン後、管理者が各管理機能へ遷移する起点。
+  ※ 各管理画面（702〜710）は並行開発中のため、リンクはダミー（href="#"）とし結合時に差し替える。
+*/-->
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理者メニュー｜フリマ社内システム</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+           background: #f4f6fa; color: #1f2733; font-size: 14px; }
+    .layout { display: flex; min-height: 100vh; }
+
+    /* サイドバー */
+    .sidebar { width: 240px; flex-shrink: 0; background: #1c2433; color: #c9d1dc; padding: 16px 0; }
+    .sidebar .brand { color: #fff; font-weight: 700; padding: 8px 20px 4px; font-size: 15px; }
+    .sidebar .brand small { display:block; color:#8a93a3; font-weight:400; font-size:11px; }
+    .sidebar h2 { font-size: 11px; letter-spacing: .08em; color: #8a93a3; margin: 14px 20px 8px; }
+    .nav { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: #c9d1dc;
+           text-decoration: none; border-left: 3px solid transparent; }
+    .nav:hover { background: #28324a; color: #fff; }
+    .nav.active { background: #28324a; color: #fff; border-left-color: #d79b00; }
+    .nav .uc { margin-left: auto; font-size: 11px; color: #7d8696; }
+    .divider { height: 1px; background: #2c3548; margin: 10px 16px; }
+
+    /* メイン */
+    .main { flex: 1; min-width: 0; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; background: #fff;
+              border-bottom: 1px solid #dfe3eb; padding: 0 24px; height: 56px; }
+    .topbar .title { font-weight: 700; }
+    .topbar .title .badge { background:#fff3e0; color:#d79b00; border-radius:4px; padding:1px 7px;
+              font-size:11px; margin-left:8px; font-weight:600; }
+    .topbar-right { display: flex; align-items: center; gap: 16px; font-size: 13px; }
+    .topbar-right .user { font-weight: 600; }
+    .topbar-right .logout { color: #1f6feb; text-decoration: none; }
+
+    .content { padding: 22px 24px; }
+    .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .search { display:flex; align-items:center; gap:6px; border:1px solid #cdd4df; background:#fff;
+              border-radius:8px; padding:6px 10px; max-width:360px; flex:1; color:#9aa3b2; }
+    .grow { flex: 1; }
+    .btn { border:1px solid #cdd4df; background:#fff; border-radius:8px; padding:7px 14px;
+           font-size:13px; cursor:pointer; text-decoration:none; color:#1f2733; white-space:nowrap; }
+    .btn.primary { background:#1f6feb; border-color:#1f6feb; color:#fff; font-weight:600; }
+    .btn.sm { padding:4px 10px; font-size:12px; }
+    .btn.warn { background:#fff8e6; border-color:#f1d58a; color:#9a6700; }
+    .btn.danger { background:#ffeef0; border-color:#f5c2c7; color:#d1242f; }
+
+    .card { background:#fff; border:1px solid #dfe3eb; border-radius:10px; overflow:hidden; }
+    table { width:100%; border-collapse:collapse; }
+    thead th { text-align:left; font-size:12px; color:#6b7480; background:#f7f9fc;
+               padding:10px 14px; border-bottom:1px solid #dfe3eb; white-space:nowrap; }
+    tbody td { padding:11px 14px; border-bottom:1px solid #eef1f5; }
+    tbody tr:last-child td { border-bottom:none; }
+    .actions { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+    .badge-st { font-size:11px; padding:2px 8px; border-radius:999px; font-weight:600; }
+    .st-active { background:#e7f6ec; color:#1a7f37; }
+    .hint { margin-top:14px; font-size:12px; color:#6b7480; background:#fff;
+            border:1px dashed #cdd4df; border-radius:8px; padding:10px 14px; }
+  </style>
 </head>
 <body>
-<p>管理者画面</p>
+<div class="layout">
+
+  <!-- ===== サイドバー：管理メニュー（各画面は並行開発中＝ダミーリンク） ===== -->
+  <aside class="sidebar">
+    <div class="brand">フリマ社内システム<small>管理者コンソール</small></div>
+    <h2>管理メニュー</h2>
+    <a class="nav active" href="#">👥 社員情報管理 <span class="uc">701</span></a>
+    <div class="divider"></div>
+    <!-- TODO: 各管理画面（並行開発中）と結合する。現在はダミーURL。 -->
+    <a class="nav" href="#">🗂️ カテゴリ管理 <span class="uc">703</span></a>
+    <a class="nav" href="#">🔑 検索キー管理 <span class="uc">704</span></a>
+    <a class="nav" href="#">🔍 不適切コンテンツ監視 <span class="uc">705</span></a>
+    <a class="nav" href="#">🚫 NGキーワード登録 <span class="uc">706</span></a>
+    <a class="nav" href="#">📦 物品削除 <span class="uc">707</span></a>
+    <a class="nav" href="#">✉️ メッセージ削除 <span class="uc">708</span></a>
+    <div class="divider"></div>
+    <a class="nav" href="#">📊 統計情報一覧 <span class="uc">710</span></a>
+  </aside>
+
+  <!-- ===== メイン：社員情報管理（701） ===== -->
+  <div class="main">
+    <header class="topbar">
+      <div class="title">社員情報管理 <span class="badge">UC701</span></div>
+      <div class="topbar-right">
+        <span class="user" th:text="${loginUser != null ? loginUser.name + ' さん' : '管理者'}">管理者 花子 さん</span>
+        <a class="logout" href="#" th:href="@{/logout}">ログアウト</a>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="toolbar">
+        <div class="search">🔍 <span>社員番号・氏名・所属・メールで検索</span></div>
+        <a class="btn" href="#">検索</a>
+        <div class="grow"></div>
+        <!-- TODO: 社員追加画面（701）と結合する -->
+        <a class="btn primary" href="#">＋ 社員追加</a>
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr><th>社員番号</th><th>氏名</th><th>所属部署</th><th>メールアドレス</th><th>状態</th><th style="text-align:right;">操作</th></tr>
+          </thead>
+          <tbody>
+            <!-- ※ 表示データは仮（DB構築後に一覧APIと結合）。社員番号は契約の users.user_id 形式。 -->
+            <tr>
+              <td>1</td><td>山田 太郎</td><td>開発部</td><td>user@example.com</td>
+              <td><span class="badge-st st-active">有効</span></td>
+              <td><div class="actions">
+                <a class="btn sm" href="#">編集</a>
+                <a class="btn sm warn" href="#"><!--/* TODO: 702 PWリセット */-->PWリセット</a>
+                <a class="btn sm warn" href="#"><!--/* TODO: 709 利用制限 */-->利用制限</a>
+                <a class="btn sm danger" href="#">削除</a>
+              </div></td>
+            </tr>
+            <tr>
+              <td>2</td><td>管理者 花子</td><td>管理部</td><td>admin@example.com</td>
+              <td><span class="badge-st st-active">有効</span></td>
+              <td><div class="actions">
+                <a class="btn sm" href="#">編集</a>
+                <a class="btn sm warn" href="#">PWリセット</a>
+                <a class="btn sm warn" href="#">利用制限</a>
+                <a class="btn sm danger" href="#">削除</a>
+              </div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="hint">
+        ※ この画面は <strong>管理者メニュー／社員情報管理（701）</strong> です。
+        左メニューの各管理機能（703 カテゴリ管理／704 検索キー管理／705 監視／706 NGキーワード／
+        707 物品削除／708 メッセージ削除／710 統計）および行内の「PWリセット(702)」「利用制限(709)」は
+        並行開発中のため、現在はダミーリンクです（結合時に各担当のパスへ差し替え）。
+      </p>
+    </div>
+  </div>
+</div>
 </body>
 </html>

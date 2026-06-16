@@ -102,12 +102,22 @@ public class LoginController {
     }
 
     /**
-     * 管理者トップ画面を表示する。
+     * 管理者トップ画面（管理者メニュー）を表示する。
+     * <p>
+     * 未ログイン、または管理者以外がアクセスした場合はログイン画面へリダイレクトする。
+     * </p>
      *
-     * @return 管理者画面（templates/kanrisha.html）
+     * @param session HTTPセッション（ログインユーザの取得）
+     * @param model   ビューへ渡すモデル（ログイン中の管理者情報）
+     * @return 管理者画面（templates/kanrisha.html）／未認可時はログインへのリダイレクト
      */
     @GetMapping("/kanrisha")
-    public String kanrisha() {
+    public String kanrisha(HttpSession session, Model model) {
+        Object attr = session.getAttribute(LoginUserProvider.SESSION_KEY_LOGIN_USER);
+        if (!(attr instanceof Users) || !((Users) attr).isAdmin()) {
+            return "redirect:/login";
+        }
+        model.addAttribute("loginUser", attr);
         return "kanrisha";
     }
 
