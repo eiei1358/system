@@ -37,8 +37,8 @@
       <div class="topbar-right">
         <span class="bell" title="通知">🔔<!--/* TODO: 通知一覧画面と結合 */--></span>
         <span class="user" th:text="${loginUser != null ? loginUser.name : 'ゲスト'}">テスト 太郎</span>
-        <!-- TODO: 並行開発中のログイン機能（ログアウト）と結合する -->
-        <a class="logout" href="#">ログアウト</a>
+        <!-- ログイン機能と結合済み：LoginController の /logout でセッション破棄 -->
+        <a class="logout" href="#" th:href="@{/logout}">ログアウト</a>
       </div>
     </header>
 
