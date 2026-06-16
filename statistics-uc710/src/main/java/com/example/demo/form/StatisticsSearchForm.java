@@ -39,4 +39,13 @@ public class StatisticsSearchForm {
      * </ul>
      */
     private String granularity = "month";
+
+    /**
+     * グラフの種別（参考実装に合わせたトグル）。
+     * <ul>
+     *   <li>{@code "bar"}  … 棒グラフ（既定）</li>
+     *   <li>{@code "line"} … 折れ線グラフ</li>
+     * </ul>
+     */
+    private String graphType = "bar";
 }

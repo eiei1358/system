@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<!--/* UC-710 統計情報閲覧（管理者）。Chart.js でカテゴリ別=棒グラフ／時系列=折れ線グラフ。 */-->
+<!--/* UC-710 統計情報閲覧（管理者）。グラフは spring_chart 参考実装に準拠（Chart.js 4.4.8 ＋ datalabels）。 */-->
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>統計情報｜フリマ社内システム</title>
-  <!-- Chart.js（CDN） -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
   <style>
     * { box-sizing: border-box; }
     body { margin:0; background:#f4f6fa; color:#1f2733;
@@ -21,6 +19,8 @@
     .cond { display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap; }
     .cond label { display:block; font-size:12px; color:#4b5563; margin-bottom:4px; }
     .cond select, .cond input { border:1px solid #cdd4df; border-radius:8px; padding:8px 10px; font-size:14px; }
+    .radios { font-size:14px; }
+    .radios label { margin-right:12px; }
     .btn { border:none; background:#1f6feb; color:#fff; border-radius:8px; padding:9px 16px;
            font-size:14px; font-weight:600; cursor:pointer; }
     table.summary { border-collapse:collapse; width:100%; max-width:420px; }
@@ -32,7 +32,7 @@
     table.detail th { background:#f7f9fc; }
     .empty { background:#fff8e6; border:1px solid #f1d58a; color:#9a6700; border-radius:8px;
              padding:24px; text-align:center; font-size:14px; }
-    .chart-box { position:relative; height:340px; }
+    .gbox { width:720px; max-width:100%; }
   </style>
 </head>
 <body>
@@ -70,6 +70,13 @@
             <option value="day">日別</option>
           </select>
         </div>
+        <div>
+          <label>グラフ種別</label>
+          <div class="radios">
+            <label><input type="radio" th:field="*{graphType}" value="bar">棒グラフ</label>
+            <label><input type="radio" th:field="*{graphType}" value="line">折れ線グラフ</label>
+          </div>
+        </div>
         <div><button class="btn" type="submit">集計する</button></div>
       </form>
     </div>
@@ -89,11 +96,17 @@
       <div class="empty">該当するデータがありません。</div>
     </div>
 
-    <!-- ===== カテゴリ別（棒グラフ＋表） ===== -->
-    <div class="panel" th:if="${result.hasData and searchForm.viewType == 'category'}">
-      <h2>カテゴリ別</h2>
-      <div class="chart-box"><canvas id="categoryChart"></canvas></div>
-      <table class="detail">
+    <!-- ===== グラフ（データあり時のみ） ===== -->
+    <div class="panel" th:if="${result.hasData}">
+      <h2 th:switch="${searchForm.viewType}">
+        <span th:case="'category'">カテゴリ別</span>
+        <span th:case="'timeseries'">時系列の推移</span>
+        <span th:case="*">全体</span>
+      </h2>
+      <div class="gbox"><canvas id="chart"></canvas></div>
+
+      <!-- 明細テーブル -->
+      <table class="detail" th:if="${searchForm.viewType == 'category'}">
         <thead><tr><th>カテゴリ</th><th>出品数</th><th>成約数</th></tr></thead>
         <tbody>
           <tr th:each="c : ${result.categoryStats}">
@@ -103,13 +116,7 @@
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <!-- ===== 時系列（折れ線グラフ＋表） ===== -->
-    <div class="panel" th:if="${result.hasData and searchForm.viewType == 'timeseries'}">
-      <h2>時系列の推移</h2>
-      <div class="chart-box"><canvas id="timeChart"></canvas></div>
-      <table class="detail">
+      <table class="detail" th:if="${searchForm.viewType == 'timeseries'}">
         <thead><tr><th>期間</th><th>出品数</th><th>成約数</th></tr></thead>
         <tbody>
           <tr th:each="p : ${result.timeSeries}">
@@ -123,42 +130,79 @@
 
   </div>
 
-  <!-- ===== Chart.js 描画 ===== -->
-  <script th:inline="javascript">
-    /*<![CDATA[*/
-    const viewType      = /*[[${searchForm.viewType}]]*/ 'overall';
-    const hasData       = /*[[${result.hasData}]]*/ false;
-    const categoryStats = /*[[${result.categoryStats}]]*/ [];
-    const timeSeries    = /*[[${result.timeSeries}]]*/ [];
+  <!-- ===== Chart.js（参考実装に準拠：4.4.8 ＋ datalabels プラグイン） ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
-    if (hasData && viewType === 'category') {
-      new Chart(document.getElementById('categoryChart'), {
-        type: 'bar',
-        data: {
-          labels: categoryStats.map(c => c.categoryName),
-          datasets: [
-            { label: '出品数', data: categoryStats.map(c => c.listingCount), backgroundColor: '#90caf9' },
-            { label: '成約数', data: categoryStats.map(c => c.dealCount),    backgroundColor: '#1f6feb' }
-          ]
-        },
-        options: { responsive: true, maintainAspectRatio: false,
-                   scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
-      });
+  <script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    const graphType   = /*[[${searchForm.graphType}]]*/ 'bar';   // 棒/折れ線
+    const hasData     = /*[[${result.hasData}]]*/ false;
+    const labels      = /*[[${chartLabels}]]*/ [];               // ラベル配列
+    const listingData = /*[[${listingData}]]*/ [];               // 出品数配列
+    const dealData    = /*[[${dealData}]]*/ [];                  // 成約数配列
+
+    if (hasData) {
+      generateGraph();
     }
 
-    if (hasData && viewType === 'timeseries') {
-      new Chart(document.getElementById('timeChart'), {
-        type: 'line',
-        data: {
-          labels: timeSeries.map(p => p.label),
-          datasets: [
-            { label: '出品数', data: timeSeries.map(p => p.listingCount), borderColor: '#90caf9', backgroundColor: '#90caf9', tension: 0.3 },
-            { label: '成約数', data: timeSeries.map(p => p.dealCount),    borderColor: '#1f6feb', backgroundColor: '#1f6feb', tension: 0.3 }
-          ]
+    //--------------------------
+    // 棒グラフ／折れ線グラフ（種別はラジオで切替）
+    function generateGraph() {
+
+      const dat = {
+        labels: labels,
+        datasets: [
+          {
+            label: '出品数',
+            data: listingData,
+            borderColor: 'dodgerblue',
+            backgroundColor: 'lightskyblue',
+            borderWidth: 2,
+            pointStyle: 'circle'
+          },
+          {
+            label: '成約数',
+            data: dealData,
+            borderColor: 'mediumseagreen',
+            backgroundColor: 'lightgreen',
+            borderWidth: 2,
+            pointStyle: 'circle'
+          }
+        ]
+      };
+
+      const opt = {
+        aspectRatio: 1.6,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { text: '件数', display: true },
+            ticks: { precision: 0 }
+          }
         },
-        options: { responsive: true, maintainAspectRatio: false,
-                   scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
-      });
+        plugins: {
+          // 各バー／点の上に数値を表示
+          datalabels: {
+            display: true,
+            anchor: 'end',
+            align: 'top',
+            color: '#1f2733',
+            font: { weight: 'bold' }
+          },
+          title: { display: true, text: '統計情報（出品数・成約数）' },
+          legend: { position: 'top' }
+        }
+      };
+
+      const cfg = {
+        type: graphType,
+        plugins: [ChartDataLabels],   // データラベル表示プラグインの有効化
+        data: dat,
+        options: opt
+      };
+
+      new Chart(document.getElementById('chart'), cfg);
     }
     /*]]>*/
   </script>

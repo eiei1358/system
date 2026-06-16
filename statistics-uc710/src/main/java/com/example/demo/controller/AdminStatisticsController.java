@@ -88,6 +88,33 @@ public class AdminStatisticsController {
 
         StatisticsResult result = statisticsService.getStatistics(form);
         model.addAttribute("result", result);
+
+        // --- グラフ用の並列リストをモデルへ（参考実装の方式：ラベル配列＋データ配列） ---
+        java.util.List<String> chartLabels = new java.util.ArrayList<>();
+        java.util.List<Long> listingData = new java.util.ArrayList<>();
+        java.util.List<Long> dealData = new java.util.ArrayList<>();
+
+        if ("timeseries".equals(form.getViewType())) {
+            result.getTimeSeries().forEach(p -> {
+                chartLabels.add(p.getLabel());
+                listingData.add(p.getListingCount());
+                dealData.add(p.getDealCount());
+            });
+        } else if ("category".equals(form.getViewType())) {
+            result.getCategoryStats().forEach(c -> {
+                chartLabels.add(c.getCategoryName());
+                listingData.add(c.getListingCount());
+                dealData.add(c.getDealCount());
+            });
+        } else { // overall：出品数・成約数の2本
+            chartLabels.add("全体");
+            listingData.add(result.getListingCount());
+            dealData.add(result.getDealCount());
+        }
+        model.addAttribute("chartLabels", chartLabels);
+        model.addAttribute("listingData", listingData);
+        model.addAttribute("dealData", dealData);
+
         return "statistics_view";
     }
 }
