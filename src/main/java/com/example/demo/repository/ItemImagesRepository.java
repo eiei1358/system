@@ -1,4 +1,4 @@
-package com.example.furima.repository;
+package com.example.demo.repository;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.furima.entity.ItemImages;
+import com.example.demo.entity.ItemImages;
 
 /**
  * 物品画像（item_images）リポジトリ。

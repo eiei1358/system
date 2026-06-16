@@ -1,4 +1,4 @@
-package com.example.furima.controller;
+package com.example.demo.controller;
 
 import java.util.List;
 
@@ -7,12 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.example.furima.dto.ItemSummaryDto;
-import com.example.furima.entity.Categories;
-import com.example.furima.entity.Users;
-import com.example.furima.form.ItemSearchForm;
-import com.example.furima.service.ItemListService;
-import com.example.furima.support.LoginUserProvider;
+import com.example.demo.dto.ItemSummaryDto;
+import com.example.demo.entity.Categories;
+import com.example.demo.entity.Users;
+import com.example.demo.form.ItemSearchForm;
+import com.example.demo.service.ItemListService;
+import com.example.demo.support.LoginUserProvider;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -22,6 +22,11 @@ import jakarta.servlet.http.HttpSession;
  * 物品一覧の表示と、キーワード／カテゴリ／状態による絞り込みを担当する。<br>
  * <b>本 Controller は item-101 画面専用。</b>他画面（ログイン・出品・マイページ等）の
  * 処理は含めず、画面内のリンクはダミーURLとしている（結合時に各担当のパスへ差し替え）。
+ * </p>
+ * <p>
+ * 【ルーティング注意】ルート {@code "/"} は既存の {@code LoginController}（別メンバー担当）が
+ * ログイン画面として割り当て済みのため、本画面は {@code "/item-101"}（別名 {@code "/items"}）に
+ * マッピングしている。ログイン成功後の遷移先として本パスを利用する想定。
  * </p>
  *
  * @author item-101 担当
@@ -55,7 +60,7 @@ public class Item101Controller {
      * @param model   ビューへ渡すモデル
      * @return ビュー名（templates/item101.html）
      */
-    @GetMapping({"/", "/item-101"})
+    @GetMapping({"/item-101", "/items"})
     public String showItemList(@ModelAttribute("searchForm") ItemSearchForm form,
                                HttpSession session,
                                Model model) {

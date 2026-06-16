@@ -1,10 +1,10 @@
-package com.example.furima.service;
+package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.furima.dto.ItemSummaryDto;
-import com.example.furima.entity.Categories;
-import com.example.furima.form.ItemSearchForm;
+import com.example.demo.dto.ItemSummaryDto;
+import com.example.demo.entity.Categories;
+import com.example.demo.form.ItemSearchForm;
 
 /**
  * item-101（物品一覧画面）のための一覧・検索サービス。

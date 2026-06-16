@@ -88,9 +88,9 @@
 
       <!-- 物品一覧（カード） -->
       <div class="grid" th:if="${resultCount > 0}">
-        <!-- 詳細（item-107）への遷移：TODO 結合時に正式パスへ -->
-        <a class="card" th:each="item : ${items}"
-           href="#" th:href="@{'#item-107?item_id=' + ${item.item_id}}">
+        <!-- TODO: item-107 物品詳細画面と結合する（現在はダミーリンク。item_id を渡す想定） -->
+        <a class="card" th:each="item : ${items}" href="#"
+           th:attr="data-item-id=${item.item_id}">
           <div class="thumb">
             <img th:if="${item.thumbnailUrl != null}" th:src="${item.thumbnailUrl}" alt="商品画像">
             <span th:unless="${item.thumbnailUrl != null}" class="no-image">NO IMAGE</span>

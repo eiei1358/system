@@ -1,9 +1,9 @@
-package com.example.furima.repository;
+package com.example.demo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.furima.entity.Categories;
+import com.example.demo.entity.Categories;
 
 /**
  * カテゴリ（categories）リポジトリ。

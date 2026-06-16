@@ -1,4 +1,4 @@
-package com.example.furima.entity;
+package com.example.demo.entity;
 
 import java.time.LocalDateTime;
 

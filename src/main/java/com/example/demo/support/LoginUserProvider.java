@@ -1,8 +1,8 @@
-package com.example.furima.support;
+package com.example.demo.support;
 
 import org.springframework.stereotype.Component;
 
-import com.example.furima.entity.Users;
+import com.example.demo.entity.Users;
 
 import jakarta.servlet.http.HttpSession;
 

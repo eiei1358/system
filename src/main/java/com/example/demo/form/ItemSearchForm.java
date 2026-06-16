@@ -1,4 +1,4 @@
-package com.example.furima.form;
+package com.example.demo.form;
 
 import lombok.Data;
 

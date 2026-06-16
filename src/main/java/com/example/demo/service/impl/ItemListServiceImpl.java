@@ -1,4 +1,4 @@
-package com.example.furima.service.impl;
+package com.example.demo.service.impl;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -9,15 +9,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.furima.dto.ItemSummaryDto;
-import com.example.furima.entity.Categories;
-import com.example.furima.entity.ItemImages;
-import com.example.furima.entity.Items;
-import com.example.furima.form.ItemSearchForm;
-import com.example.furima.repository.CategoriesRepository;
-import com.example.furima.repository.ItemImagesRepository;
-import com.example.furima.repository.ItemsRepository;
-import com.example.furima.service.ItemListService;
+import com.example.demo.dto.ItemSummaryDto;
+import com.example.demo.entity.Categories;
+import com.example.demo.entity.ItemImages;
+import com.example.demo.entity.Items;
+import com.example.demo.form.ItemSearchForm;
+import com.example.demo.repository.CategoriesRepository;
+import com.example.demo.repository.ItemImagesRepository;
+import com.example.demo.repository.ItemsRepository;
+import com.example.demo.service.ItemListService;
 
 /**
  * {@link ItemListService} の実装。
