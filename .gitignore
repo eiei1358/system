@@ -23,6 +23,8 @@ bin/
 # Frontend (React)
 src/main/resources/frontend/node_modules/
 src/main/resources/frontend/dist/
+src/main/resources/frontend/src/**/*.js
+src/main/resources/frontend/package-lock.json
 src/main/resources/static/
 src/main/resources/frontend/.env
 src/main/resources/frontend/.env.local
