@@ -89,31 +89,30 @@ public class AdminStatisticsController {
         StatisticsResult result = statisticsService.getStatistics(form);
         model.addAttribute("result", result);
 
-        // --- グラフ用の並列リストをモデルへ（参考実装の方式：ラベル配列＋データ配列） ---
-        java.util.List<String> chartLabels = new java.util.ArrayList<>();
-        java.util.List<Long> listingData = new java.util.ArrayList<>();
-        java.util.List<Long> dealData = new java.util.ArrayList<>();
+        // --- ダッシュボード用：カテゴリ別・時系列の両方を並列リストでモデルへ ---
+        java.util.List<String> categoryLabels = new java.util.ArrayList<>();
+        java.util.List<Long> categoryListings = new java.util.ArrayList<>();
+        java.util.List<Long> categoryDeals = new java.util.ArrayList<>();
+        result.getCategoryStats().forEach(c -> {
+            categoryLabels.add(c.getCategoryName());
+            categoryListings.add(c.getListingCount());
+            categoryDeals.add(c.getDealCount());
+        });
+        model.addAttribute("categoryLabels", categoryLabels);
+        model.addAttribute("categoryListings", categoryListings);
+        model.addAttribute("categoryDeals", categoryDeals);
 
-        if ("timeseries".equals(form.getViewType())) {
-            result.getTimeSeries().forEach(p -> {
-                chartLabels.add(p.getLabel());
-                listingData.add(p.getListingCount());
-                dealData.add(p.getDealCount());
-            });
-        } else if ("category".equals(form.getViewType())) {
-            result.getCategoryStats().forEach(c -> {
-                chartLabels.add(c.getCategoryName());
-                listingData.add(c.getListingCount());
-                dealData.add(c.getDealCount());
-            });
-        } else { // overall：出品数・成約数の2本
-            chartLabels.add("全体");
-            listingData.add(result.getListingCount());
-            dealData.add(result.getDealCount());
-        }
-        model.addAttribute("chartLabels", chartLabels);
-        model.addAttribute("listingData", listingData);
-        model.addAttribute("dealData", dealData);
+        java.util.List<String> timeLabels = new java.util.ArrayList<>();
+        java.util.List<Long> timeListings = new java.util.ArrayList<>();
+        java.util.List<Long> timeDeals = new java.util.ArrayList<>();
+        result.getTimeSeries().forEach(p -> {
+            timeLabels.add(p.getLabel());
+            timeListings.add(p.getListingCount());
+            timeDeals.add(p.getDealCount());
+        });
+        model.addAttribute("timeLabels", timeLabels);
+        model.addAttribute("timeListings", timeListings);
+        model.addAttribute("timeDeals", timeDeals);
 
         return "statistics_view";
     }
