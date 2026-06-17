@@ -1,12 +1,14 @@
 # フリマ社内システム
 
-Spring Boot + React + PostgreSQL による完全なフルスタックフリマシステム
+Spring Boot + React（統合） + PostgreSQL による完全なフルスタックフリマシステム
+
+**Eclipse への統合**: フロントエンドは Spring Boot バックエンドに統合されているため、バックエンドプロジェクトのみをインポートすれば完了。
 
 ## システム要件
 
 - AlmaLinux 8/9（CentOS互換）
 - Java 17以上
-- Node.js 18以上
+- Node.js 18以上（Gradle が自動ダウンロード）
 - PostgreSQL 12以上
 - Nginx
 
@@ -51,16 +53,14 @@ DROP ROLE IF EXISTS student;
 CREATE ROLE student PASSWORD 'himitu' LOGIN;
 CREATE DATABASE free_market123 OWNER student;
 \c free_market123
--- スキーマ初期化スクリプト（同梱のsql4スクリプトの内容を実行）
+-- スキーマ初期化スクリプト（同梱の init.sql の内容を実行）
 EOF
 ```
 
 ### 3. データベーススキーマの作成
 
-提供されている `sql4.sql` ファイルの内容をPostgreSQLで実行:
-
 ```bash
-sudo -u postgres psql -d free_market123 -f sql4.sql
+sudo -u postgres psql -d free_market123 -f infra/database/init.sql
 ```
 
 ### 4. アプリケーションのデプロイ
@@ -81,8 +81,8 @@ sudo ./deploy.sh
 ```
 
 デプロイスクリプトは以下を自動実行します:
-- Spring Boot JARファイルのビルド
-- React フロントエンドのビルド
+- Node.js 依存関係のインストール
+- Spring Boot + React 統合ビルド
 - Nginx の設定と再起動
 - Systemd サービスの登録と起動
 
@@ -135,7 +135,7 @@ sudo systemctl status nginx
 ### ログ確認
 
 ```bash
-# バックエンド ログ
+# バックエンド + フロントエンド ログ
 sudo journalctl -u furima-backend -f
 
 # Nginx ログ
@@ -160,76 +160,84 @@ http://<server-ip>/
 
 ### ローカル開発環境のセットアップ
 
-#### バックエンド開発
+#### バックエンド + フロントエンド開発
+
+**Eclipse へのインポート:**
+
+1. Eclipse を起動
+2. File → Import → Gradle → Existing Gradle Project
+3. `backend` ディレクトリを選択
+4. Finish
+
+フロントエンド は `backend/src/main/resources/frontend` に統合されています。
+
+#### 開発サーバーの実行
+
+**バックエンド:**
 
 ```bash
 cd backend
-
-# Gradle Wrapper のセットアップ（初回）
-gradle wrapper
-
-# ビルド
-./gradlew clean build
-
-# 開発サーバー実行（IDEまたは以下のコマンド）
 ./gradlew bootRun
 ```
 
-Eclipse にプロジェクトをインポート:
-
-1. File → Import → Gradle → Existing Gradle Project
-2. `backend` ディレクトリを選択
-3. Finish
-
-#### フロントエンド開発
+**フロントエンド（別ターミナル）:**
 
 ```bash
-cd frontend
-
-# 依存関係のインストール
+cd backend/src/main/resources/frontend
 npm install
-
-# 開発サーバー起動
 npm run dev
-
-# ビルド
-npm run build
 ```
+
+フロントエンドは `http://localhost:5173` で起動。API は `http://localhost:8080/api` にプロキシされます。
+
+#### ビルド
+
+```bash
+cd backend
+./gradlew clean bootJar
+```
+
+完成した JAR は `backend/build/libs/free-market-backend-0.0.1-SNAPSHOT.jar`
 
 ## プロジェクト構成
 
 ```
 system/
-├── backend/                          # Spring Boot プロジェクト
+├── backend/                                     # Spring Boot プロジェクト（メイン）
 │   ├── src/main/java/com/example/furima/
-│   │   ├── entity/                  # JPA エンティティ
-│   │   ├── repository/              # Spring Data JPA リポジトリ
-│   │   ├── service/                 # ビジネスロジック
-│   │   ├── controller/              # REST API コントローラー
-│   │   ├── dto/                     # データ転送オブジェクト
-│   │   └── config/                  # 設定クラス
-│   ├── build.gradle                 # Gradle 設定
-│   └── settings.gradle              # Gradle 設定
+│   │   ├── entity/                             # 9つのJPAエンティティ
+│   │   ├── repository/                         # 9つのリポジトリ
+│   │   ├── service/                            # 7つのサービス
+│   │   ├── controller/                         # 8つのコントローラー
+│   │   │   ├── FrontendController.java         # SPA ルーティング
+│   │   │   └── ...
+│   │   ├── dto/                                # データ転送オブジェクト
+│   │   └── config/                             # シード初期化
+│   ├── src/main/resources/
+│   │   ├── frontend/                           # React フロントエンド（統合）
+│   │   │   ├── src/
+│   │   │   │   ├── pages/                      # 8ページコンポーネント
+│   │   │   │   ├── api.ts                      # APIクライアント
+│   │   │   │   └── main.tsx
+│   │   │   ├── package.json
+│   │   │   └── vite.config.ts
+│   │   ├── static/                             # React ビルド成果物（自動生成）
+│   │   └── application.properties              # Spring Boot 設定
+│   ├── build.gradle                            # Gradle 設定（Node.js ビルド統合）
+│   └── gradlew                                 # Gradle Wrapper
 │
-├── frontend/                        # React フロントエンド
-│   ├── src/
-│   │   ├── pages/                   # ページコンポーネント
-│   │   ├── api.ts                   # API クライアント
-│   │   └── main.tsx                 # エントリーポイント
-│   ├── package.json
-│   └── vite.config.ts
+├── infra/                                      # インフラ設定
+│   ├── nginx/furima.conf                       # リバースプロキシ設定
+│   ├── systemd/furima-backend.service          # Systemd サービス定義
+│   └── database/init.sql                       # スキーマ
 │
-├── infra/                           # インフラストラクチャ設定
-│   ├── nginx/
-│   │   └── furima.conf              # Nginx リバースプロキシ設定
-│   └── systemd/
-│       └── furima-backend.service   # Systemd サービス定義
-│
-├── deploy.sh                        # デプロイ自動化スクリプト
-└── README.md                        # このファイル
+├── deploy.sh                                   # 完全自動デプロイスクリプト
+└── README.md                                   # このファイル
 ```
 
 ## API エンドポイント
+
+すべてのエンドポイントは `/api` で始まります。
 
 ### 認証
 - `POST /api/auth/login` - ログイン
@@ -337,8 +345,8 @@ sudo systemctl status nginx
 # Nginx 設定をテスト
 sudo nginx -t
 
-# ビルドファイルが存在するか確認
-ls -la /var/www/furima/frontend/dist
+# Spring Boot が正しく起動しているか確認
+sudo systemctl status furima-backend
 ```
 
 ### メール送信が失敗する
@@ -356,7 +364,7 @@ ls -la /var/www/furima/frontend/dist
 問題が発生した場合は、以下のログを確認してください:
 
 ```bash
-# バックエンド ログ
+# バックエンド + フロントエンド ログ
 sudo journalctl -u furima-backend -f
 
 # Nginx エラー ログ

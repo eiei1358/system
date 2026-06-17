@@ -4,12 +4,10 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKEND_DIR="$SCRIPT_DIR/backend"
-FRONTEND_DIR="$SCRIPT_DIR/frontend"
 INFRA_DIR="$SCRIPT_DIR/infra"
 
 INSTALL_DIR="/opt/furima"
 BACKEND_INSTALL_DIR="$INSTALL_DIR/backend"
-FRONTEND_INSTALL_DIR="$INSTALL_DIR/frontend"
 
 echo "=== フリマ社内システム デプロイスクリプト ==="
 echo ""
@@ -40,53 +38,36 @@ fi
 echo "✓ システム依存関係の確認完了"
 echo ""
 
-echo "Step 2: Spring Boot JARファイルのビルド"
+echo "Step 2: Spring Boot + React フロントエンド統合ビルド"
 cd "$BACKEND_DIR"
+echo "Node.js依存関係をインストール中..."
+npm install --prefix src/main/resources/frontend --legacy-peer-deps
+
 echo "Gradleでビルド中..."
 chmod +x gradlew
 ./gradlew clean bootJar
+
 if [ ! -f "build/libs/free-market-backend-0.0.1-SNAPSHOT.jar" ]; then
     echo "✗ JARファイルのビルドに失敗しました"
     exit 1
 fi
-echo "✓ Spring Boot JARファイルのビルド完了"
+echo "✓ Spring Boot + フロントエンド統合ビルド完了"
 cd - > /dev/null
 echo ""
 
-echo "Step 3: Reactフロントエンドのビルド"
-cd "$FRONTEND_DIR"
-echo "npm依存関係をインストール中..."
-npm install --legacy-peer-deps
-echo "フロントエンドをビルド中..."
-npm run build
-if [ ! -d "dist" ]; then
-    echo "✗ フロントエンドのビルドに失敗しました"
-    exit 1
-fi
-echo "✓ Reactフロントエンドのビルド完了"
-cd - > /dev/null
-echo ""
-
-echo "Step 4: インストールディレクトリの準備"
+echo "Step 3: インストールディレクトリの準備"
 sudo mkdir -p "$INSTALL_DIR"
 sudo mkdir -p "$BACKEND_INSTALL_DIR"
-sudo mkdir -p "$FRONTEND_INSTALL_DIR"
-sudo mkdir -p /var/www/furima/frontend
-
 echo "✓ インストールディレクトリを作成"
 echo ""
 
-echo "Step 5: ファイルの配置"
+echo "Step 4: ファイルの配置"
 echo "バックエンド JARファイルをコピー中..."
 sudo cp "$BACKEND_DIR/build/libs/free-market-backend-0.0.1-SNAPSHOT.jar" "$BACKEND_INSTALL_DIR/"
-
-echo "フロントエンド静的ファイルをコピー中..."
-sudo cp -r "$FRONTEND_DIR/dist"/* /var/www/furima/frontend/
-
 echo "✓ ファイルの配置完了"
 echo ""
 
-echo "Step 6: Systemdサービスの設定"
+echo "Step 5: Systemdサービスの設定"
 sudo cp "$INFRA_DIR/systemd/furima-backend.service" /etc/systemd/system/
 
 echo "サービスファイルをリロード中..."
@@ -98,7 +79,7 @@ sudo systemctl enable furima-backend
 echo "✓ Systemdサービスの設定完了"
 echo ""
 
-echo "Step 7: Nginx設定"
+echo "Step 6: Nginx設定"
 sudo cp "$INFRA_DIR/nginx/furima.conf" /etc/nginx/conf.d/
 
 echo "Nginx設定をテスト中..."
@@ -113,7 +94,7 @@ sudo systemctl restart nginx
 echo "✓ Nginx設定完了"
 echo ""
 
-echo "Step 8: 環境ファイルの作成"
+echo "Step 7: 環境ファイルの作成"
 if [ ! -f "$BACKEND_INSTALL_DIR/.env" ]; then
     cat > /tmp/.env.tmp <<'EOF'
 spring.application.name=free-market-backend
@@ -149,14 +130,13 @@ else
 fi
 echo ""
 
-echo "Step 9: パーミッション設定"
+echo "Step 8: パーミッション設定"
 sudo useradd -r -s /bin/false furima 2>/dev/null || true
 sudo chown -R furima:furima "$INSTALL_DIR"
-sudo chown -R furima:nginx /var/www/furima
 echo "✓ パーミッション設定完了"
 echo ""
 
-echo "Step 10: サービスの開始"
+echo "Step 9: サービスの開始"
 echo "Spring Bootサービスを開始中..."
 sudo systemctl start furima-backend
 

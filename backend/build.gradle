@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.5'
 	id 'io.spring.dependency-management' version '1.1.5'
+	id 'com.github.node-gradle.node' version '7.0.1'
 }
 
 group = 'com.example'
@@ -30,6 +31,40 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+node {
+	version = '18.17.0'
+	npmVersion = '9.6.7'
+	download = true
+	nodeProjectDir = file('src/main/resources/frontend')
+}
+
+task buildFrontend(type: NpmTask) {
+	description = 'Build React frontend'
+	args = ['run', 'build']
+	outputs.dir('src/main/resources/static')
+}
+
+task npmInstall(type: NpmTask) {
+	description = 'Install npm dependencies'
+	args = ['install', '--legacy-peer-deps']
+}
+
+buildFrontend.dependsOn npmInstall
+
+processResources.dependsOn buildFrontend
+
+tasks.register('copyFrontendDist') {
+	dependsOn buildFrontend
+	doLast {
+		copy {
+			from 'src/main/resources/frontend/dist'
+			into 'src/main/resources/static'
+		}
+	}
+}
+
+processResources.finalizedBy copyFrontendDist
 
 bootJar {
 	archiveFileName = 'free-market-backend-0.0.1-SNAPSHOT.jar'
