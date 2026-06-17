@@ -26,21 +26,44 @@ Eclipse:
 
 ## ビルド & 実行
 
-### 開発モード（フロントエンド + バックエンド）
+### Eclipse での実行
+
+1. プロジェクトをインポート後、Gradle を更新:
+   - プロジェクトを右クリック → **Gradle** → **Refresh Gradle Project**
+
+2. Spring Boot を実行:
+   - プロジェクトを右クリック → **Run As** → **Spring Boot App**
+   - または Eclipse の Run メニューから **Run Configurations** で Spring Boot App を作成
+
+3. 開発用の H2 データベース使用（デフォルト）:
+   - アプリケーションは H2 in-memory データベースで実行
+   - コンソール: `http://localhost:8080/api/h2-console`
+
+4. アクセス:
+   - `http://localhost:8080/`
+
+### コマンドラインでの実行
+
+#### 開発モード（H2 メモリデータベース）
 
 ```bash
-# 依存関係インストール（初回）
-npm install --prefix src/main/resources/frontend --legacy-peer-deps
-
-# 開発サーバー起動
+# Gradle Wrapper で実行
 ./gradlew bootRun
-```
 
-フロントエンド開発（別ターミナル）:
-```bash
+# または npm で開発フロントエンド実行（別ターミナル）
 cd src/main/resources/frontend
 npm install
 npm run dev
+```
+
+#### 本番モード（PostgreSQL）
+
+```bash
+# ビルド
+./gradlew clean bootJar
+
+# 実行（PostgreSQL が必要）
+java -jar build/libs/free-market-backend-0.0.1-SNAPSHOT.jar
 ```
 
 ### ビルド
@@ -158,6 +181,16 @@ sudo systemctl restart nginx
 ```
 
 ## アクセス
+
+### 開発環境（H2 使用時）
+
+- フロントエンド: `http://localhost:8080/`
+- H2 コンソール: `http://localhost:8080/api/h2-console`
+  - JDBC URL: `jdbc:h2:mem:testdb`
+  - ユーザー名: `sa`
+  - パスワード: (空)
+
+### 本番環境（PostgreSQL 使用時）
 
 ```
 http://<server-ip>/
