@@ -11,7 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import java.sql.PreparedStatement;
+
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -121,13 +125,36 @@ public class TestDataInitializer implements CommandLineRunner {
                     "SELECT category_id FROM categories WHERE name = ? ORDER BY category_id LIMIT 1",
                     rs -> rs.next() ? rs.getInt(1) : null, cat.name());
             if (id == null) {
-                id = jdbc.queryForObject(
-                        "INSERT INTO categories (name) VALUES (?) RETURNING category_id",
-                        Integer.class, cat.name());
+                id = insertReturningId(
+                        "INSERT INTO categories (name) VALUES (?)",
+                        "category_id", cat.name());
             }
             ids.add(id);
         }
         return ids;
+    }
+
+    /**
+     * INSERT を実行し、自動採番された主キーを取得する（PostgreSQL/H2 両対応）。
+     *
+     * @param sql       INSERT文（RETURNING 句なし）
+     * @param idColumn  取得する自動採番カラム名
+     * @param params    バインドパラメータ
+     * @return 生成された主キー値
+     */
+    private int insertReturningId(String sql, String idColumn, Object... params) {
+        KeyHolder kh = new GeneratedKeyHolder();
+        jdbc.update(conn -> {
+            PreparedStatement ps = conn.prepareStatement(sql, new String[]{idColumn});
+            for (int i = 0; i < params.length; i++) {
+                ps.setObject(i + 1, params[i]);
+            }
+            return ps;
+        }, kh);
+        Number key = (kh.getKeys() != null && kh.getKeys().containsKey(idColumn))
+                ? (Number) kh.getKeys().get(idColumn)
+                : kh.getKey();
+        return key.intValue();
     }
 
     /**
@@ -167,11 +194,11 @@ public class TestDataInitializer implements CommandLineRunner {
                 LocalDate deadline = createdAt.toLocalDate().plusDays(30);
 
                 // items は status INTEGER（0:出品中 等）。成約有無は transactions 側で表現する。
-                Integer itemId = jdbc.queryForObject(
+                Integer itemId = insertReturningId(
                         "INSERT INTO items "
                         + "(user_id, name, description, condition, price, type, status, category_id, deadline, created_at, place) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING item_id",
-                        Integer.class,
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "item_id",
                         sellerId, cat.name() + " 出品No." + (total + 1), "サンプル出品データ",
                         condition, price, type, 0, categoryId, deadline, createdAt, place);
 

@@ -100,13 +100,26 @@ public class StatisticsRepository {
      * @return 期間バケットごとの (バケット開始日時, 件数)。SQLは date_trunc を使用。
      */
     public List<Object[]> listingsOverTime(LocalDateTime start, LocalDateTime end, String granularity) {
+        // date_trunc の第1引数はバインドできない（PostgreSQL/H2 とも）。
+        // granularity はホワイトリスト（month/day）済みのため直接埋め込む。
+        String field = safeField(granularity);
         String sql =
-                "SELECT date_trunc(?, created_at) AS bucket, COUNT(*) AS cnt "
+                "SELECT date_trunc('" + field + "', created_at) AS bucket, COUNT(*) AS cnt "
               + "FROM items WHERE created_at >= ? AND created_at < ? "
               + "GROUP BY bucket ORDER BY bucket";
         return jdbcTemplate.query(sql,
                 (rs, n) -> new Object[]{ rs.getTimestamp("bucket").toLocalDateTime(), rs.getLong("cnt") },
-                granularity, start, end);
+                start, end);
+    }
+
+    /**
+     * date_trunc に渡す粒度を安全な値（{@code month}/{@code day}）に限定する。
+     *
+     * @param granularity 入力粒度
+     * @return {@code "day"} または {@code "month"}
+     */
+    private String safeField(String granularity) {
+        return "day".equals(granularity) ? "day" : "month";
     }
 
     /**
@@ -118,12 +131,13 @@ public class StatisticsRepository {
      * @return 期間バケットごとの (バケット開始日時, 件数)。
      */
     public List<Object[]> dealsOverTime(LocalDateTime start, LocalDateTime end, String granularity) {
+        String field = safeField(granularity);
         String sql =
-                "SELECT date_trunc(?, completed_at) AS bucket, COUNT(*) AS cnt "
+                "SELECT date_trunc('" + field + "', completed_at) AS bucket, COUNT(*) AS cnt "
               + "FROM transactions WHERE completed_at IS NOT NULL AND completed_at >= ? AND completed_at < ? "
               + "GROUP BY bucket ORDER BY bucket";
         return jdbcTemplate.query(sql,
                 (rs, n) -> new Object[]{ rs.getTimestamp("bucket").toLocalDateTime(), rs.getLong("cnt") },
-                granularity, start, end);
+                start, end);
     }
 }
