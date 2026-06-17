@@ -1,29 +1,9 @@
-# Backend
-backend/build/
-backend/.gradle/
-backend/.idea/
-backend/*.iml
-backend/*.iws
-backend/*.ipr
-backend/out/
-backend/bin/
-backend/.classpath
-backend/.project
-backend/.settings/
-backend/.vscode/
-
-# Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/.DS_Store
-frontend/dist-ssr/
-frontend/*.local
-frontend/.vite/
-frontend/.env
-frontend/.env.local
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
+# Gradle
+build/
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
 
 # IDE
 .idea/
@@ -31,7 +11,26 @@ frontend/yarn-error.log*
 *.swp
 *.swo
 *~
-.DS_Store
+*.iml
+*.iws
+*.ipr
+out/
+bin/
+.classpath
+.project
+.settings/
+
+# Frontend (React)
+src/main/resources/frontend/node_modules/
+src/main/resources/frontend/dist/
+src/main/resources/static/
+src/main/resources/frontend/.env
+src/main/resources/frontend/.env.local
+src/main/resources/frontend/npm-debug.log*
+src/main/resources/frontend/yarn-debug.log*
+src/main/resources/frontend/yarn-error.log*
+src/main/resources/frontend/.vite/
+src/main/resources/frontend/*.local
 
 # OS
 Thumbs.db
@@ -42,29 +41,16 @@ Thumbs.db
 .env.local
 .env.*.local
 
-# Gradle
-.gradle/
-gradle-app.setting
-!gradle-wrapper.jar
-.gradletasknamecache
-
 # Node
 node_modules/
 npm-debug.log
 yarn-error.log
 
-# PostgreSQL
-postgres_data/
-*.sql.backup
-
-# Logs
+# Misc
 logs/
 *.log
-
-# Misc
 target/
 dist/
-build/
 *.jar
 *.war
 !gradle-wrapper.jar
