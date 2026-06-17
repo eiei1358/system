@@ -16,9 +16,6 @@ gradle-app.setting
 *.ipr
 out/
 bin/
-.classpath
-.project
-.settings/
 
 # Frontend (React)
 src/main/resources/frontend/node_modules/

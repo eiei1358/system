@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=17
+org.eclipse.jdt.core.compiler.compliance=17
+org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
+org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
+org.eclipse.jdt.core.compiler.release=enabled
+org.eclipse.jdt.core.compiler.source=17
+org.eclipse.jdt.core.formatter.indent_empty_lines=false
+org.eclipse.jdt.core.formatter.insert_new_line_before_catch_in_try_statement=false
+org.eclipse.jdt.core.formatter.insert_space_after_comma_in_array_initializer=true
+org.eclipse.jdt.core.formatter.insert_space_before_colon_in_labeled_statement=false
+org.eclipse.jdt.core.formatter.keep_empty_array_initializer_on_one_line=false
+org.eclipse.jdt.core.formatter.number_of_empty_lines_to_preserve=1
+org.eclipse.jdt.core.formatter.put_empty_statement_on_new_line=true
