@@ -1,0 +1,5 @@
+rootProject.name = 'free-market-backend'
+
+include ':backend'
+
+project(':backend').projectDir = file('.')

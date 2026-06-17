@@ -1,0 +1,19 @@
+[Unit]
+Description=Free Market Backend Service
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=furima
+WorkingDirectory=/opt/furima/backend
+EnvironmentFile=/opt/furima/backend/.env
+ExecStart=/usr/bin/java -Xms512m -Xmx1024m -XX:+UseG1GC -jar /opt/furima/backend/build/libs/free-market-backend-0.0.1-SNAPSHOT.jar
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=furima-backend
+Environment="JAVA_HOME=/usr/lib/jvm/java-17-openjdk"
+
+[Install]
+WantedBy=multi-user.target

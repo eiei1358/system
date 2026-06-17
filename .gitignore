@@ -1,0 +1,71 @@
+# Backend
+backend/build/
+backend/.gradle/
+backend/.idea/
+backend/*.iml
+backend/*.iws
+backend/*.ipr
+backend/out/
+backend/bin/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.vscode/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.DS_Store
+frontend/dist-ssr/
+frontend/*.local
+frontend/.vite/
+frontend/.env
+frontend/.env.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# PostgreSQL
+postgres_data/
+*.sql.backup
+
+# Logs
+logs/
+*.log
+
+# Misc
+target/
+dist/
+build/
+*.jar
+*.war
+!gradle-wrapper.jar
+*.class
