@@ -26,20 +26,27 @@ Eclipse:
 
 ## ビルド & 実行
 
+### 🚀 最も簡単な実行方法
+
+ZIP をインポート後、以下のファイルをダブルクリック：
+
+- **Windows**: `run.bat`
+- **Mac/Linux**: `run.sh`
+
+アプリケーションが自動的に起動し、以下にアクセスできます：
+- フロントエンド: `http://localhost:8080/`
+- ログイン: `user0@sample.com` / `pass`
+
 ### Eclipse での実行
 
 1. プロジェクトをインポート後、Gradle を更新:
    - プロジェクトを右クリック → **Gradle** → **Refresh Gradle Project**
 
 2. Spring Boot を実行:
-   - プロジェクトを右クリック → **Run As** → **Spring Boot App**
-   - または Eclipse の Run メニューから **Run Configurations** で Spring Boot App を作成
+   - プロジェクトを右クリック → **Run As** → **Java Application**
+   - Main class: `FreeMarketBackendApplication` を選択
 
-3. 開発用の H2 データベース使用（デフォルト）:
-   - アプリケーションは H2 in-memory データベースで実行
-   - コンソール: `http://localhost:8080/api/h2-console`
-
-4. アクセス:
+3. ブラウザでアクセス:
    - `http://localhost:8080/`
 
 ### コマンドラインでの実行
@@ -47,13 +54,14 @@ Eclipse:
 #### 開発モード（H2 メモリデータベース）
 
 ```bash
-# Gradle Wrapper で実行
-./gradlew bootRun
+# Windows
+run.bat
 
-# または npm で開発フロントエンド実行（別ターミナル）
-cd src/main/resources/frontend
-npm install
-npm run dev
+# Mac/Linux
+./run.sh
+
+# または直接実行
+./gradlew bootRun --args="--spring.profiles.active=dev"
 ```
 
 #### 本番モード（PostgreSQL）
@@ -63,17 +71,8 @@ npm run dev
 ./gradlew clean bootJar
 
 # 実行（PostgreSQL が必要）
-java -jar build/libs/free-market-backend-0.0.1-SNAPSHOT.jar
+java -jar build/libs/free-market-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
-
-### ビルド
-
-```bash
-# 本番 JAR ビルド
-./gradlew clean bootJar
-```
-
-完成した JAR: `build/libs/free-market-backend-0.0.1-SNAPSHOT.jar`
 
 ## 本番デプロイ（AlmaLinux）
 
