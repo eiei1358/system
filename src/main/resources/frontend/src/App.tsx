@@ -55,8 +55,8 @@ export default function App() {
     setCurrentPage('login')
   }
 
-  const navigateTo = (page: CurrentPage, itemId?: number, transactionId?: number, code?: string) => {
-    setCurrentPage(page)
+  const navigateTo = (page: string, itemId?: number, transactionId?: number, code?: string) => {
+    setCurrentPage(page as CurrentPage)
     if (itemId) setSelectedItemId(itemId)
     if (transactionId) setSelectedTransactionId(transactionId)
     if (code) setTransferCode(code)
